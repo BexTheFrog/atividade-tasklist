@@ -1,3 +1,5 @@
+import 'package:atividade_tasklist/config/colors.dart';
+import 'package:atividade_tasklist/pages/add_task_page.dart';
 import 'package:atividade_tasklist/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +10,13 @@ class ToDoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'To-Do App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: ''),
+      // Se você usar 'initialRoute', não precisa do 'home'
+      initialRoute: "/",
+      routes: {
+        "/": (context) => const MyHomePage(),
+        "/addTask": (context) => const AddTaskPage(),
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
