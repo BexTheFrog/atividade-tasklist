@@ -28,17 +28,53 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _toggleTaskDone(int index) async {
-    await TaskService.toggleTaskDone(index);
-    _loadTasks();
+    tasks[index].taskStatus = !tasks[index].taskStatus;
+    await TaskService.saveTasks(tasks);
+    setState(() {});
   }
 
   Future<void> _deleteTask(int index) async {
-    await TaskService.deleteTask(index);
-    _loadTasks();
+    tasks.removeAt(index);
+    await TaskService.saveTasks(tasks);
+    setState(() {});
+  }
+
+  Future<void> _editTask(int index) async {
+    TextEditingController editController = TextEditingController(
+      text: tasks[index].taskTitle,
+    );
+
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Editar tarefa"),
+        content: TextField(
+          controller: editController,
+          decoration: InputDecoration(hintText: "Digite o novo título"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancelar"),
+          ),
+          TextButton(
+            onPressed: () async {
+              tasks[index].taskTitle = editController.text;
+              await TaskService.saveTasks(tasks);
+              setState(() {});
+              Navigator.pop(context);
+            },
+            child: Text("Salvar"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final completedCount = tasks.where((t) => t.taskStatus).length;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.vanilla,
@@ -46,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "To-Do List",
+              "To-Do List ($completedCount/${tasks.length})",
               style: TextStyle(
                 color: AppColors.moonstone,
                 fontWeight: FontWeight.bold,
@@ -54,6 +90,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete_sweep, color: AppColors.moonstone),
+            onPressed: () async {
+              tasks.removeWhere((task) => task.taskStatus);
+              await TaskService.saveTasks(tasks);
+              setState(() {});
+            },
+            tooltip: "Remover todas as tarefas concluídas",
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -74,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     initialStatus: task.taskStatus,
                     onStatusChanged: (status) => _toggleTaskDone(index),
                     onDelete: () => _deleteTask(index),
+                    onEdit: () => _editTask(index),
                   );
                 },
               ),

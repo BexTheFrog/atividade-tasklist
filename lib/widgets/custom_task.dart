@@ -7,6 +7,7 @@ class CustomTask extends StatefulWidget {
   final bool initialStatus;
   final ValueChanged<bool>? onStatusChanged;
   final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
 
   const CustomTask({
     super.key,
@@ -15,6 +16,7 @@ class CustomTask extends StatefulWidget {
     this.initialStatus = false,
     this.onStatusChanged,
     this.onDelete,
+    this.onEdit,
   });
 
   @override
@@ -99,11 +101,16 @@ class _CustomTaskState extends State<CustomTask> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  SizedBox(width: 150),
+                  IconButton(
+                    icon: Icon(Icons.edit, color: AppColors.vanilla),
+                    onPressed: widget.onEdit,
+                  ),
+                  IconButton(
+                    onPressed: widget.onDelete,
+                    icon: Icon(Icons.delete, color: AppColors.vanilla),
+                  ),
                 ],
-              ),
-              IconButton(
-                onPressed: widget.onDelete,
-                icon: Icon(Icons.delete, color: AppColors.vanilla),
               ),
             ],
           ),

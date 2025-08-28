@@ -22,11 +22,8 @@ class CustomFormField extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: TextStyle(
-            color: Color.fromRGBO(158, 157, 157, 1),
-          ), // Fica fixo como placeholder
+          hintStyle: TextStyle(color: AppColors.moonstone),
           filled: true,
-          fillColor: AppColors.vanilla, // evita flutuar
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(15)),
             borderSide: BorderSide(color: AppColors.moonstone, width: 3),

@@ -18,7 +18,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.vanilla,
       appBar: AppBar(
         backgroundColor: AppColors.moonstone,
         title: Text(
